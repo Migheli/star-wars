@@ -2,6 +2,7 @@ import asyncio
 from curses_tools import draw_frame
 from itertools import cycle
 from curses_tools import read_controls, get_frame_size
+from physics import update_speed
 
 async def animate_spaceship(canvas, row, column, rocket_frame_1, rocket_frame_2):
    

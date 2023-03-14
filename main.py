@@ -36,7 +36,6 @@ def draw(canvas):
     ship = animate_spaceship(canvas, center_y, center_x, rocket_frame_1, rocket_frame_2)
 
 
-    
     coroutines.append(shot)
     coroutines.append(ship)
 
