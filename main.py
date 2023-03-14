@@ -5,7 +5,10 @@ from animations.fire_animation import fire
 from animations.animate_spaceship import animate_spaceship
 from animations.stars import blink
 from animations.space_garbage import fly_garbage
+from animations.stars import sleep
+
 import asyncio
+
 
 TIC_TIMEOUT = 0.1
 GARBAGE_DELAY = 10
@@ -44,11 +47,11 @@ def draw(canvas):
     min_number_of_stars = 10
     max_number_of_stars = 145
 
+
     async def fill_orbit_with_garbage(canvas, garbage, start_column, border_x):
         while True:
             coroutines.append(fly_garbage(canvas, randint(start_column, border_x), choice(garbage)))
-            for delay in range(GARBAGE_DELAY):
-                await asyncio.sleep(0)
+            await sleep(10)
 
     for i in range(randint(min_number_of_stars, max_number_of_stars)):
         coroutines.append(blink(canvas, randint(start_row, border_y), randint(start_column, border_x), choice(stars_signs)))
