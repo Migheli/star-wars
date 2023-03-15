@@ -4,11 +4,14 @@ from itertools import cycle
 from curses_tools import read_controls, get_frame_size
 from physics import update_speed
 
+
 async def animate_spaceship(canvas, row, column, rocket_frame_1, rocket_frame_2):
    
     frames = [rocket_frame_1, rocket_frame_2]
     
     input_controls = []
+    
+    row_speed = column_speed = 0
 
     for frame in cycle(frames):
 
@@ -28,10 +31,12 @@ async def animate_spaceship(canvas, row, column, rocket_frame_1, rocket_frame_2)
         
         draw_frame(canvas, row, column, frame)
         await asyncio.sleep(0)
+        
         draw_frame(canvas, row, column, frame, negative=True)
         input_controls = read_controls(canvas)
-        row_dir, col_dir, shot_btn = input_controls
-        row += row_dir
-        column += col_dir
-          
+        row_direction, column_direction, shot_btn = input_controls
+        
+        row_speed, column_speed = update_speed(row_speed, column_speed, row_direction, column_direction)
 
+        row += row_speed
+        column += column_speed

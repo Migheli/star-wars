@@ -17,9 +17,7 @@ async def blink(canvas, row, column, symbol):
 
         canvas.addstr(row, column, symbol, curses.A_BOLD)
         await sleep(randint(3,20))
-
           
           
         canvas.addstr(row, column, symbol)
         await sleep(randint(3,20))
-    
