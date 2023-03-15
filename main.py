@@ -33,7 +33,7 @@ def draw(canvas):
     center_y, center_x = border_y//2, border_x//2
 
     shot = fire(canvas, center_y, center_x)
-    ship = animate_spaceship(canvas, center_y, center_x, rocket_frame_1, rocket_frame_2)
+    ship = animate_spaceship(canvas, center_y, center_x, rocket_frame_1, rocket_frame_2, coroutines)
 
 
     coroutines.append(shot)

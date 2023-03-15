@@ -3,9 +3,10 @@ from curses_tools import draw_frame
 from itertools import cycle
 from curses_tools import read_controls, get_frame_size
 from physics import update_speed
+from animations.fire_animation import fire
 
 
-async def animate_spaceship(canvas, row, column, rocket_frame_1, rocket_frame_2):
+async def animate_spaceship(canvas, row, column, rocket_frame_1, rocket_frame_2, coroutines):
    
     frames = [rocket_frame_1, rocket_frame_2]
     
@@ -34,9 +35,14 @@ async def animate_spaceship(canvas, row, column, rocket_frame_1, rocket_frame_2)
         
         draw_frame(canvas, row, column, frame, negative=True)
         input_controls = read_controls(canvas)
-        row_direction, column_direction, shot_btn = input_controls
+        row_direction, column_direction, is_shot_pressed = input_controls
         
         row_speed, column_speed = update_speed(row_speed, column_speed, row_direction, column_direction)
 
+
         row += row_speed
         column += column_speed
+
+
+        if is_shot_pressed:
+            coroutines.append(fire(canvas, row, column))
