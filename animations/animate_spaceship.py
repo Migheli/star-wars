@@ -6,7 +6,7 @@ from physics import update_speed
 from animations.fire_animation import fire
 
 
-async def animate_spaceship(canvas, row, column, rocket_frame_1, rocket_frame_2, coroutines):
+async def animate_spaceship(canvas, row, column, rocket_frame_1, rocket_frame_2, coroutines, obstacles, obstacles_in_last_collision):
    
     frames = [rocket_frame_1, rocket_frame_2]
     
@@ -45,4 +45,4 @@ async def animate_spaceship(canvas, row, column, rocket_frame_1, rocket_frame_2,
 
 
         if is_shot_pressed:
-            coroutines.append(fire(canvas, row, column))
+            coroutines.append(fire(canvas, row, column, obstacles, obstacles_in_last_collision))

@@ -15,7 +15,7 @@ TIC_TIMEOUT = 0.1
 GARBAGE_DELAY = 10
 coroutines = []
 obstacles = []
-
+obstacles_in_last_collisions = []
 
 def draw(canvas):
     canvas.nodelay(True)
@@ -35,11 +35,11 @@ def draw(canvas):
 
     center_y, center_x = border_y//2, border_x//2
 
-    shot = fire(canvas, center_y, center_x)
-    ship = animate_spaceship(canvas, center_y, center_x, rocket_frame_1, rocket_frame_2, coroutines)
+    #shot = fire(canvas, center_y, center_x, obstacles)
+    ship = animate_spaceship(canvas, center_y, center_x, rocket_frame_1, rocket_frame_2, coroutines, obstacles, obstacles_in_last_collisions)
 
 
-    coroutines.append(shot)
+    #coroutines.append(shot)
     coroutines.append(ship)
 
 
@@ -51,15 +51,15 @@ def draw(canvas):
 
 
 
-    async def fill_orbit_with_garbage(canvas, garbage, start_column, border_x, obstacles):
+    async def fill_orbit_with_garbage(canvas, garbage, start_column, border_x, obstacles, obstacles_in_last_collisions):
         while True:
-            coroutines.append(fly_garbage(canvas, randint(start_column, border_x), choice(garbage), obstacles))
+            coroutines.append(fly_garbage(canvas, randint(start_column, border_x), choice(garbage), obstacles, obstacles_in_last_collisions))
             await sleep(10)
 
     for i in range(randint(min_number_of_stars, max_number_of_stars)):
         coroutines.append(blink(canvas, randint(start_row, border_y), randint(start_column, border_x), choice(stars_signs)))
 
-    coroutines.append(fill_orbit_with_garbage(canvas, garbage, start_column, border_x, obstacles))
+    coroutines.append(fill_orbit_with_garbage(canvas, garbage, start_column, border_x, obstacles, obstacles_in_last_collisions))
     coroutines.append(show_obstacles(canvas, obstacles))
 
     while True:
