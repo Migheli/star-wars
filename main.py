@@ -6,6 +6,7 @@ from animations.animate_spaceship import animate_spaceship
 from animations.stars import blink
 from animations.space_garbage import fly_garbage
 from animations.stars import sleep
+from animations.obstacles import show_obstacles
 
 import asyncio
 
@@ -40,6 +41,7 @@ def draw(canvas):
     coroutines.append(ship)
 
 
+
     stars_signs = ['+', '*', '.', ':']
     start_row = start_column = 1
     
@@ -47,16 +49,18 @@ def draw(canvas):
     max_number_of_stars = 145
 
 
-    async def fill_orbit_with_garbage(canvas, garbage, start_column, border_x):
+    obstacles = []
+
+    async def fill_orbit_with_garbage(canvas, garbage, start_column, border_x, obstacles):
         while True:
-            coroutines.append(fly_garbage(canvas, randint(start_column, border_x), choice(garbage)))
+            coroutines.append(fly_garbage(canvas, randint(start_column, border_x), choice(garbage), obstacles))
             await sleep(10)
 
     for i in range(randint(min_number_of_stars, max_number_of_stars)):
         coroutines.append(blink(canvas, randint(start_row, border_y), randint(start_column, border_x), choice(stars_signs)))
 
-    coroutines.append(fill_orbit_with_garbage(canvas, garbage, start_column, border_x))
-
+    coroutines.append(fill_orbit_with_garbage(canvas, garbage, start_column, border_x, obstacles))
+    coroutines.append(show_obstacles(canvas, obstacles))
 
     while True:
         for coroutine in coroutines.copy():
