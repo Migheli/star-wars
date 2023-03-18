@@ -1,7 +1,7 @@
 import asyncio
 import curses
 
-
+from animations.explosion import explode
 
 async def fire(canvas, start_row, start_column, obstacles, obstacles_in_last_collisions, rows_speed=-0.3, columns_speed=0):
     """Display animation of gun shot, direction and speed can be specified."""
@@ -31,6 +31,7 @@ async def fire(canvas, start_row, start_column, obstacles, obstacles_in_last_col
         for obstacle in obstacles:
             if obstacle.has_collision(row, column, obstacle.rows_size, obstacle.columns_size):
                 obstacles_in_last_collisions.append(obstacle)
+                await explode(canvas, row, column)
                 return
      
         canvas.addstr(round(row), round(column), symbol)
