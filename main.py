@@ -14,6 +14,8 @@ import asyncio
 TIC_TIMEOUT = 0.1
 GARBAGE_DELAY = 10
 coroutines = []
+obstacles = []
+
 
 def draw(canvas):
     canvas.nodelay(True)
@@ -41,7 +43,6 @@ def draw(canvas):
     coroutines.append(ship)
 
 
-
     stars_signs = ['+', '*', '.', ':']
     start_row = start_column = 1
     
@@ -49,7 +50,6 @@ def draw(canvas):
     max_number_of_stars = 145
 
 
-    obstacles = []
 
     async def fill_orbit_with_garbage(canvas, garbage, start_column, border_x, obstacles):
         while True:
@@ -68,6 +68,7 @@ def draw(canvas):
                 coroutine.send(None)
             except StopIteration:
                 coroutines.remove(coroutine)
+        
         if not len(coroutines):
             break
 

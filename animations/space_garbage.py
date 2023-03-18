@@ -15,11 +15,17 @@ async def fly_garbage(canvas, column, garbage_frame, obstacles, speed=0.5):
     obstacle = Obstacle(row, column, garbage_size_rows, garbage_size_columns)
     obstacles.append(obstacle)
 
-    while row < rows_number:
-        draw_frame(canvas, row, column, garbage_frame)
+    try:
+        while row < rows_number:
+            draw_frame(canvas, row, column, garbage_frame)
 
-        obstacle.row = row 
+            obstacle.row = row 
 
-        await asyncio.sleep(0)
-        draw_frame(canvas, row, column, garbage_frame, negative=True)
-        row += speed
+            await asyncio.sleep(0)
+            draw_frame(canvas, row, column, garbage_frame, negative=True)
+            row += speed
+
+    except StopIteration:
+        obstacles.remove(obstacle)
+    finally:
+        obstacles.remove(obstacle)
