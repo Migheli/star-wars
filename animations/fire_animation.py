@@ -1,6 +1,5 @@
 import asyncio
 import curses
-
 from animations.explosion import explode
 
 async def fire(canvas, start_row, start_column, obstacles, obstacles_in_last_collisions, rows_speed=-0.3, columns_speed=0):

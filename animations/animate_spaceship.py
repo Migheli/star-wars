@@ -7,16 +7,7 @@ from animations.fire_animation import fire
 from animations.stars import sleep
 import time 
 import math
-
-
-async def show_game_over(canvas, center_row, center_column, gameover_frame):
-    gameover_size_rows, gameover_size_columns = get_frame_size(gameover_frame)
-    center_column -= gameover_size_columns*0.5
-    center_row -= gameover_size_rows*0.5
-    while True:
-        draw_frame(canvas, center_row, center_column, gameover_frame, negative=False)
-        await asyncio.sleep(0)
-                    
+from animations.game_messages import show_game_over
 
 async def animate_spaceship(canvas, row, column, rocket_frame_1, rocket_frame_2, coroutines, obstacles, obstacles_in_last_collision, start_time, start_year, gun_available_year):
    
