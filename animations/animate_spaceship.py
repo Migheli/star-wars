@@ -20,7 +20,7 @@ async def animate_spaceship(canvas, row, column, rocket_frame_1, rocket_frame_2,
     center_row = row
     center_column = column 
 
-    with open("gameover.txt", "r") as gameover_file:    
+    with open("frames/gameover.txt", "r") as gameover_file:    
             gameover_frame = gameover_file.read()
 
 

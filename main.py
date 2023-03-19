@@ -62,7 +62,7 @@ def draw(canvas):
 
     curses.curs_set(0)
 
-    with open("rocket_frame_1.txt", "r") as frame_file1, open("rocket_frame_2.txt", "r") as frame_file2:
+    with open("frames/rocket_frame_1.txt", "r") as frame_file1, open("frames/rocket_frame_2.txt", "r") as frame_file2:
         rocket_frame_1, rocket_frame_2 = frame_file1.read(), frame_file2.read()
 
     window_width, window_height = curses.window.getmaxyx(canvas)
@@ -70,7 +70,7 @@ def draw(canvas):
 
     """ window.getmaxyx - return tuple of values width and height of window, not coordinates of last cells in rows and columns. Numeration of width and height of window starts from 0 and it values always more, than coordinates of last cells in rows/columns (+1). That's why we need to makes (-1) in border_x, border_y declaration """
 
-    with open("trash_small.txt", "r") as trash_small, open("trash_large.txt", "r") as trash_large, open("trash_xl.txt", "r") as trash_xl:
+    with open("frames/trash_small.txt", "r") as trash_small, open("frames/trash_large.txt", "r") as trash_large, open("frames/trash_xl.txt", "r") as trash_xl:
         garbage = [trash_small.read(), trash_large.read(), trash_xl.read()]
 
     center_y, center_x = border_y//2, border_x//2
