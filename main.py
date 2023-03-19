@@ -15,12 +15,47 @@ import asyncio
 
 
 TIC_TIMEOUT = 0.1
-GARBAGE_DELAY = 10
+START_YEAR = 1951
+GUN_AVAILABLE_YEAR = 2020
+start_time = time.time()
 coroutines = []
 obstacles = []
 obstacles_in_last_collisions = []
-start_time = time.time()
-year = None
+
+
+async def show_current_year(canvas):
+        while True:
+            canvas.addstr(1, 1, str(year))
+            canvas.refresh()
+            await asyncio.sleep(0)
+
+async def show_phrases(canvas):
+    while True:
+        if year in PHRASES:
+            canvas.addstr(1, 6, PHRASES[year])
+        else: 
+            canvas.addstr(1, 6, '                           ')
+        canvas.refresh()
+        await asyncio.sleep(0)
+
+async def update_current_year(start_time):
+    while True:
+        seconds_left = time.time() - start_time 
+        years_left = math.floor(seconds_left/1.5)
+        global year 
+        year = START_YEAR + years_left
+        await asyncio.sleep(0)
+
+
+async def fill_orbit_with_garbage(canvas, garbage, start_column, border_x, obstacles, obstacles_in_last_collisions):
+        while True:
+            if year:
+                garbage_delay = get_garbage_delay_tics(year)
+                if garbage_delay:
+                        coroutines.append(fly_garbage(canvas, randint(start_column, border_x), choice(garbage), obstacles, obstacles_in_last_collisions))
+                        await sleep(garbage_delay)
+            await asyncio.sleep(0)
+
 
 def draw(canvas):
     canvas.nodelay(True)
@@ -40,75 +75,28 @@ def draw(canvas):
 
     center_y, center_x = border_y//2, border_x//2
 
-    
-    stat_canvas = canvas.derwin(1, 1) 
-    #shot = fire(canvas, center_y, center_x, obstacles)
-
-
-
-
-
     stars_signs = ['+', '*', '.', ':']
     start_row = start_column = 1
     
-    min_number_of_stars = 10
-    max_number_of_stars = 145
-
-
-    async def update_current_year(start_time):
-        while True:
-            seconds_left = time.time() - start_time 
-            years_left = math.floor(seconds_left/1.5)
-            global year 
-            year = 1951 + years_left
-            await asyncio.sleep(0)
 
     coroutines.append(update_current_year(start_time))
-
-
-    async def show_current_year(canvas):
-        while True:
-            canvas.addstr(1, 1, str(year))
-            canvas.refresh()
-            await asyncio.sleep(0)
-
-    async def show_phrases(canvas):
-        while True:
-            if year in PHRASES:
-                canvas.addstr(1, 6, PHRASES[year])
-            else: 
-                canvas.addstr(1, 6, '                           ')
-
-
-            canvas.refresh()
-            await asyncio.sleep(0)
-
-
-
+    stat_canvas = canvas.derwin(1, 1) 
     coroutines.append(show_current_year(stat_canvas))
     coroutines.append(show_phrases(stat_canvas))
 
     
-    ship = animate_spaceship(canvas, center_y, center_x, rocket_frame_1, rocket_frame_2, coroutines, obstacles, obstacles_in_last_collisions, start_time)
-
+    ship = animate_spaceship(canvas, center_y, center_x, rocket_frame_1, rocket_frame_2, coroutines, obstacles, obstacles_in_last_collisions, start_time, START_YEAR, GUN_AVAILABLE_YEAR)
     coroutines.append(ship)
     
-    async def fill_orbit_with_garbage(canvas, garbage, start_column, border_x, obstacles, obstacles_in_last_collisions):
-        while True:
-            if year:
-                garbage_delay = get_garbage_delay_tics(year)
-                if garbage_delay:
-                        coroutines.append(fly_garbage(canvas, randint(start_column, border_x), choice(garbage), obstacles, obstacles_in_last_collisions))
-                        await sleep(garbage_delay)
-        
-            await asyncio.sleep(0)
-           
+    min_number_of_stars = 10
+    max_number_of_stars = 145
+
     for i in range(randint(min_number_of_stars, max_number_of_stars)):
         coroutines.append(blink(canvas, randint(start_row, border_y), randint(start_column, border_x), choice(stars_signs)))
 
 
     coroutines.append(fill_orbit_with_garbage(canvas, garbage, start_column, border_x, obstacles, obstacles_in_last_collisions))
-    coroutines.append(show_obstacles(canvas, obstacles))
+    #coroutines.append(show_obstacles(canvas, obstacles))
 
 
     while True:

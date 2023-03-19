@@ -5,8 +5,9 @@ from curses_tools import read_controls, get_frame_size
 from physics import update_speed
 from animations.fire_animation import fire
 from animations.stars import sleep
-import time
+import time 
 import math
+
 
 async def show_game_over(canvas, center_row, center_column, gameover_frame):
     gameover_size_rows, gameover_size_columns = get_frame_size(gameover_frame)
@@ -17,7 +18,7 @@ async def show_game_over(canvas, center_row, center_column, gameover_frame):
         await asyncio.sleep(0)
                     
 
-async def animate_spaceship(canvas, row, column, rocket_frame_1, rocket_frame_2, coroutines, obstacles, obstacles_in_last_collision, start_time):
+async def animate_spaceship(canvas, row, column, rocket_frame_1, rocket_frame_2, coroutines, obstacles, obstacles_in_last_collision, start_time, start_year, gun_available_year):
    
     frames = [rocket_frame_1, rocket_frame_2]
     
@@ -35,8 +36,6 @@ async def animate_spaceship(canvas, row, column, rocket_frame_1, rocket_frame_2,
     game_over_view = show_game_over(canvas, center_row, center_column, gameover_frame)
 
     for frame in cycle(frames):
-
-
         
         number_of_rows, number_of_columns = canvas.getmaxyx()
         ship_size_rows, ship_size_columns = get_frame_size(frame)
@@ -61,10 +60,8 @@ async def animate_spaceship(canvas, row, column, rocket_frame_1, rocket_frame_2,
         
         row_speed, column_speed = update_speed(row_speed, column_speed, row_direction, column_direction)
 
-
         row += row_speed
         column += column_speed
-
 
         for obstacle in obstacles:
             if obstacle.has_collision(row, column, ship_size_rows, ship_size_columns):
@@ -73,8 +70,7 @@ async def animate_spaceship(canvas, row, column, rocket_frame_1, rocket_frame_2,
 
         seconds_left = time.time() - start_time 
         years_left = math.floor(seconds_left/1.5)
-        year = years_left + 1951
+        year = years_left + start_year
         
-        if year > 1970 and is_shot_pressed:
+        if year > gun_available_year and is_shot_pressed:
             coroutines.append(fire(canvas, row, column, obstacles, obstacles_in_last_collision))
-
