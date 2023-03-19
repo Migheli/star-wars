@@ -34,7 +34,7 @@ async def show_phrases(canvas):
         if year in PHRASES:
             canvas.addstr(1, 6, PHRASES[year])
         else: 
-            canvas.addstr(1, 6, '                           ')
+            canvas.addstr(1, 6, ' ' * 25)
         canvas.refresh()
         await asyncio.sleep(0)
 
