@@ -7,17 +7,16 @@ async def sleep(tics=1):
         await asyncio.sleep(0)
 
 
-async def blink(canvas, row, column, symbol):
+async def blink(canvas, row, column, symbol, offset_tics):
     while True:
         canvas.addstr(row, column, symbol, curses.A_DIM)
-        await sleep(randint(3,20))
+        await sleep(offset_tics)
 
         canvas.addstr(row, column, symbol)
-        await sleep(randint(3,20))
+        await sleep(offset_tics)
 
         canvas.addstr(row, column, symbol, curses.A_BOLD)
-        await sleep(randint(3,20))
-          
+        await sleep(offset_tics)
           
         canvas.addstr(row, column, symbol)
-        await sleep(randint(3,20))
+        await sleep(offset_tics)
