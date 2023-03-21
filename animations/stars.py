@@ -1,6 +1,6 @@
 import asyncio
 import curses
-from random import randint
+
 
 async def sleep(tics=1):
     for tic in range(tics):
@@ -17,6 +17,5 @@ async def blink(canvas, row, column, symbol, offset_tics):
 
         canvas.addstr(row, column, symbol, curses.A_BOLD)
         await sleep(offset_tics)
-          
         canvas.addstr(row, column, symbol)
         await sleep(offset_tics)

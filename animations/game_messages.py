@@ -8,4 +8,4 @@ async def show_game_over(canvas, center_row, center_column, gameover_frame):
     center_row -= gameover_size_rows*0.5
     while True:
         draw_frame(canvas, center_row, center_column, gameover_frame, negative=False)
-        await asyncio.sleep(0)                    
+        await asyncio.sleep(0)
