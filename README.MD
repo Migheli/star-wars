@@ -39,7 +39,6 @@ python3 main.py
 
 Наслаждайтесь игрой! 
 
-Пример игрового процесса:
 <img src="https://dvmn.org/media/lessons/ezgif-6-9ef2761efd97.gif" alt="Геймплей">
 
 
