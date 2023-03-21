@@ -1,11 +1,11 @@
 import asyncio
+import math
+import time
 from curses_tools import draw_frame
 from itertools import cycle
 from curses_tools import read_controls, get_frame_size
 from physics import update_speed
 from animations.fire_animation import fire
-import time
-import math
 from animations.game_messages import show_game_over
 
 
