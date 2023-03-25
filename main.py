@@ -1,6 +1,8 @@
 import asyncio
 import curses
 import math
+from os import listdir
+from os.path import isfile, join
 import time
 from random import randint, choice
 from animations.animate_spaceship import animate_spaceship
@@ -65,8 +67,15 @@ def draw(canvas):
     window_width, window_height = curses.window.getmaxyx(canvas)
     border_y, border_x = window_width-1, window_height-1
 
-    with open("frames/trash_small.txt", "r") as trash_small, open("frames/trash_large.txt", "r") as trash_large, open("frames/trash_xl.txt", "r") as trash_xl:
-        garbage = [trash_small.read(), trash_large.read(), trash_xl.read()]
+    garbage = []
+    garbage_frame_dir = 'frames/garbage'
+    garbage_frames = [join(garbage_frame_dir, frame) for frame in listdir(garbage_frame_dir)]
+
+    for garbage_frame in garbage_frames:
+        with open(garbage_frame, 'r') as garbage_unit:
+            garbage.append(garbage_unit.read())
+
+
 
     center_y, center_x = border_y//2, border_x//2
 
