@@ -69,8 +69,6 @@ def draw(canvas):
         with open(rocket_frame, 'r') as rocket_frame_unit:
             rocket_animation.append(rocket_frame_unit.read())
 
-    rocket_frame_1, rocket_frame_2 = rocket_animation
-
 
     window_width, window_height = curses.window.getmaxyx(canvas)
     border_y, border_x = window_width-1, window_height-1
@@ -92,7 +90,7 @@ def draw(canvas):
     stat_canvas = canvas.derwin(1, 1)
     coroutines.append(show_current_year(stat_canvas))
     coroutines.append(show_phrases(stat_canvas))
-    ship = animate_spaceship(canvas, center_y, center_x, rocket_frame_1, rocket_frame_2, coroutines, obstacles, obstacles_in_last_collisions, start_time, START_YEAR, GUN_AVAILABLE_YEAR)
+    ship = animate_spaceship(canvas, center_y, center_x, rocket_animation, coroutines, obstacles, obstacles_in_last_collisions, start_time, START_YEAR, GUN_AVAILABLE_YEAR)
     coroutines.append(ship)
     min_number_of_stars = 10
     max_number_of_stars = 145

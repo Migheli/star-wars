@@ -9,8 +9,7 @@ from animations.fire_animation import fire
 from animations.game_messages import show_game_over
 
 
-async def animate_spaceship(canvas, row, column, rocket_frame_1, rocket_frame_2, coroutines, obstacles, obstacles_in_last_collision, start_time, start_year, gun_available_year):
-    frames = [rocket_frame_1, rocket_frame_2]
+async def animate_spaceship(canvas, row, column, rocket_animation, coroutines, obstacles, obstacles_in_last_collision, start_time, start_year, gun_available_year):
     input_controls = []
     row_speed = column_speed = 0
 
@@ -22,7 +21,7 @@ async def animate_spaceship(canvas, row, column, rocket_frame_1, rocket_frame_2,
 
     game_over_view = show_game_over(canvas, center_row, center_column, gameover_frame)
 
-    for frame in cycle(frames):
+    for frame in cycle(rocket_animation):
 
         number_of_rows, number_of_columns = canvas.getmaxyx()
         ship_size_rows, ship_size_columns = get_frame_size(frame)
