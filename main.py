@@ -13,11 +13,15 @@ from game_scenario import get_garbage_delay_tics, PHRASES
 
 TIC_TIMEOUT = 0.1
 START_YEAR = 1951
-GUN_AVAILABLE_YEAR = 2020
+GUN_AVAILABLE_YEAR = 1956
 start_time = time.time()
 coroutines = []
 obstacles = []
 obstacles_in_last_collisions = []
+
+
+def get_current_year():
+    return year
 
 
 async def show_current_year(canvas):
@@ -37,13 +41,7 @@ async def show_phrases(canvas):
         await asyncio.sleep(0)
 
 
-async def update_current_year(start_time):
-    while True:
-        seconds_left = time.time() - start_time
-        years_left = math.floor(seconds_left/1.5)
-        global year
-        year = START_YEAR + years_left
-        await asyncio.sleep(0)
+
 
 
 async def fill_orbit_with_garbage(canvas, garbage, start_column, border_x, obstacles, obstacles_in_last_collisions):
@@ -84,13 +82,15 @@ def draw(canvas):
 
     center_y, center_x = border_y//2, border_x//2
 
+    global year
+    year = 1951
     stars_signs = ['+', '*', '.', ':']
     start_row = start_column = 1
-    coroutines.append(update_current_year(start_time))
+    #coroutines.append(update_current_year(start_time))
     stat_canvas = canvas.derwin(1, 1)
     coroutines.append(show_current_year(stat_canvas))
     coroutines.append(show_phrases(stat_canvas))
-    ship = animate_spaceship(canvas, center_y, center_x, rocket_animation, coroutines, obstacles, obstacles_in_last_collisions, start_time, START_YEAR, GUN_AVAILABLE_YEAR)
+    ship = animate_spaceship(canvas, center_y, center_x, rocket_animation, coroutines, obstacles, obstacles_in_last_collisions, get_current_year, GUN_AVAILABLE_YEAR)
     coroutines.append(ship)
     min_number_of_stars = 10
     max_number_of_stars = 145
@@ -101,7 +101,13 @@ def draw(canvas):
 
     coroutines.append(fill_orbit_with_garbage(canvas, garbage, start_column, border_x, obstacles, obstacles_in_last_collisions))
 
+    
+    cycle_count = 0
     while True:
+        cycle_count +=1
+        if cycle_count % 20 == 0:
+            year += 1
+
         for coroutine in coroutines.copy():
             try:
                 coroutine.send(None)
