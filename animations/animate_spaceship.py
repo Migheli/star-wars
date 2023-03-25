@@ -10,6 +10,8 @@ from animations.game_messages import show_game_over
 
 
 async def animate_spaceship(canvas, row, column, rocket_animation, coroutines, obstacles, obstacles_in_last_collision, is_gun_available):
+
+
     input_controls = []
     row_speed = column_speed = 0
 
@@ -52,7 +54,7 @@ async def animate_spaceship(canvas, row, column, rocket_animation, coroutines, o
                     coroutines.append(game_over_view)
                     return
 
-            is_gun_available() = is_gun_available()
+            gun_available = is_gun_available()
 
-            if year > gun_available_year and is_gun_available:
+            if gun_available and is_shot_pressed:
                 coroutines.append(fire(canvas, row, column, obstacles, obstacles_in_last_collision))

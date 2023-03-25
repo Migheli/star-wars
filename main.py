@@ -23,6 +23,9 @@ obstacles_in_last_collisions = []
 def get_current_year():
     return year
 
+def is_gun_available():
+    return year >= GUN_AVAILABLE_YEAR
+
 
 async def show_current_year(canvas):
     while True:
@@ -90,7 +93,7 @@ def draw(canvas):
     stat_canvas = canvas.derwin(1, 1)
     coroutines.append(show_current_year(stat_canvas))
     coroutines.append(show_phrases(stat_canvas))
-    ship = animate_spaceship(canvas, center_y, center_x, rocket_animation, coroutines, obstacles, obstacles_in_last_collisions, get_current_year, GUN_AVAILABLE_YEAR)
+    ship = animate_spaceship(canvas, center_y, center_x, rocket_animation, coroutines, obstacles, obstacles_in_last_collisions, is_gun_available)
     coroutines.append(ship)
     min_number_of_stars = 10
     max_number_of_stars = 145
