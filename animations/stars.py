@@ -1,6 +1,7 @@
 import asyncio
 import curses
 
+
 async def sleep(tics=1):
     for tic in range(tics):
         await asyncio.sleep(0)
