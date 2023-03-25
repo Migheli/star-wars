@@ -61,8 +61,16 @@ def draw(canvas):
 
     curses.curs_set(0)
 
-    with open("frames/rocket_frame_1.txt", "r") as frame_file1, open("frames/rocket_frame_2.txt", "r") as frame_file2:
-        rocket_frame_1, rocket_frame_2 = frame_file1.read(), frame_file2.read()
+    rocket_animation = []
+    rocket_frame_dir = 'frames/rocket'
+    rocket_frames = [join(rocket_frame_dir, frame) for frame in listdir(rocket_frame_dir)]
+    
+    for rocket_frame in rocket_frames:
+        with open(rocket_frame, 'r') as rocket_frame_unit:
+            rocket_animation.append(rocket_frame_unit.read())
+
+    rocket_frame_1, rocket_frame_2 = rocket_animation
+
 
     window_width, window_height = curses.window.getmaxyx(canvas)
     border_y, border_x = window_width-1, window_height-1
@@ -74,7 +82,6 @@ def draw(canvas):
     for garbage_frame in garbage_frames:
         with open(garbage_frame, 'r') as garbage_unit:
             garbage.append(garbage_unit.read())
-
 
 
     center_y, center_x = border_y//2, border_x//2
