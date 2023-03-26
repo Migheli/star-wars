@@ -1,6 +1,4 @@
 import asyncio
-import math
-import time
 from curses_tools import draw_frame
 from itertools import cycle
 from curses_tools import read_controls, get_frame_size
@@ -15,9 +13,8 @@ async def animate_spaceship(canvas, coordinates, rocket_animation, coroutines, o
     input_controls = []
     row_speed = column_speed = 0
 
-    row = coordinates[0]
-    column = coordinates[1]
-    
+    row, column = coordinates
+
     for frame in cycle(rocket_animation):
 
         for step in range(2):
@@ -26,7 +23,7 @@ async def animate_spaceship(canvas, coordinates, rocket_animation, coroutines, o
             ship_size_rows, ship_size_columns = get_frame_size(frame)
             ship_border_row = number_of_rows - ship_size_rows
             ship_border_column = number_of_columns - ship_size_columns
-                  
+
             row = min(row, ship_border_row)
             row = max(row, 0)
             column = min(column, ship_border_column)
@@ -34,7 +31,7 @@ async def animate_spaceship(canvas, coordinates, rocket_animation, coroutines, o
 
             draw_frame(canvas, row, column, frame)
             await asyncio.sleep(0)
-            
+
             draw_frame(canvas, row, column, frame, negative=True)
 
             input_controls = read_controls(canvas)

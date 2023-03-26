@@ -1,8 +1,7 @@
 import asyncio
 import curses
-import math
 from os import listdir
-from os.path import isfile, join
+from os.path import join
 import time
 from random import randint, choice
 from animations.animate_spaceship import animate_spaceship
@@ -62,11 +61,10 @@ def draw(canvas):
     rocket_animation = []
     rocket_frame_dir = 'frames/rocket'
     rocket_frames = [join(rocket_frame_dir, frame) for frame in listdir(rocket_frame_dir)]
-    
+
     for rocket_frame in rocket_frames:
         with open(rocket_frame, 'r') as rocket_frame_unit:
             rocket_animation.append(rocket_frame_unit.read())
-
 
     window_width, window_height = curses.window.getmaxyx(canvas)
     border_y, border_x = window_width-1, window_height-1
@@ -78,7 +76,6 @@ def draw(canvas):
     for garbage_frame in garbage_frames:
         with open(garbage_frame, 'r') as garbage_unit:
             garbage.append(garbage_unit.read())
-
 
     coordinates = border_y//2, border_x//2
 
@@ -100,10 +97,9 @@ def draw(canvas):
     coroutines.append(fill_orbit_with_garbage(canvas, garbage, start_column, border_x, obstacles, obstacles_in_last_collisions))
 
     cycle_count = 0
-    
-    
+
     while True:
-        cycle_count +=1
+        cycle_count += 1
         if cycle_count % 20 == 0:
             year += 1
 
@@ -113,10 +109,9 @@ def draw(canvas):
             except GameOverException:
                 coroutines.remove(coroutine)
                 coroutines.append(show_game_over(canvas, coordinates))
-
             except StopIteration:
                 coroutines.remove(coroutine)
-            
+
         if not len(coroutines):
             break
 

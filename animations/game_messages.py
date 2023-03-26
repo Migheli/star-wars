@@ -8,7 +8,7 @@ class GameOverException(Exception):
 
 async def show_game_over(canvas, coordinates, frame='frames/gameover.txt'):
 
-    center_row, center_column = coordinates[0], coordinates[1]
+    center_row, center_column = coordinates
 
     with open(frame, 'r') as gameover_frame:
         frame = gameover_frame.read()
@@ -19,4 +19,3 @@ async def show_game_over(canvas, coordinates, frame='frames/gameover.txt'):
     while True:
         draw_frame(canvas, center_row, center_column, frame, negative=False)
         await asyncio.sleep(0)
-
