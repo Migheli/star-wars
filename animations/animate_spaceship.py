@@ -6,23 +6,18 @@ from itertools import cycle
 from curses_tools import read_controls, get_frame_size
 from physics import update_speed
 from animations.fire_animation import fire
-from animations.game_messages import show_game_over
+from animations.game_messages import GameOverException
+from animations.explosion import explode
 
 
-async def animate_spaceship(canvas, row, column, rocket_animation, coroutines, obstacles, obstacles_in_last_collision, is_gun_available):
-
+async def animate_spaceship(canvas, coordinates, rocket_animation, coroutines, obstacles, obstacles_in_last_collision, is_gun_available):
 
     input_controls = []
     row_speed = column_speed = 0
 
-    center_row = row
-    center_column = column
-
-    with open("frames/gameover.txt", "r") as gameover_file:
-        gameover_frame = gameover_file.read()
-
-    game_over_view = show_game_over(canvas, center_row, center_column, gameover_frame)
-
+    row = coordinates[0]
+    column = coordinates[1]
+    
     for frame in cycle(rocket_animation):
 
         for step in range(2):
@@ -51,7 +46,10 @@ async def animate_spaceship(canvas, row, column, rocket_animation, coroutines, o
 
             for obstacle in obstacles:
                 if obstacle.has_collision(row, column, ship_size_rows, ship_size_columns):
-                    coroutines.append(game_over_view)
+                    obstacles_in_last_collision.append(obstacle)
+                    await explode(canvas, obstacle.row, obstacle.column)
+                    await explode(canvas, row, column)
+                    raise GameOverException
                     return
 
             gun_available = is_gun_available()

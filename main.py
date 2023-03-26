@@ -9,19 +9,17 @@ from animations.animate_spaceship import animate_spaceship
 from animations.stars import blink, sleep
 from animations.space_garbage import fly_garbage
 from game_scenario import get_garbage_delay_tics, PHRASES
+from animations.game_messages import show_game_over, GameOverException
 
 
 TIC_TIMEOUT = 0.1
 START_YEAR = 1951
 GUN_AVAILABLE_YEAR = 1956
-start_time = time.time()
+
 coroutines = []
 obstacles = []
 obstacles_in_last_collisions = []
 
-
-def get_current_year():
-    return year
 
 def is_gun_available():
     return year >= GUN_AVAILABLE_YEAR
@@ -44,9 +42,6 @@ async def show_phrases(canvas):
         await asyncio.sleep(0)
 
 
-
-
-
 async def fill_orbit_with_garbage(canvas, garbage, start_column, border_x, obstacles, obstacles_in_last_collisions):
     while True:
         if year:
@@ -59,8 +54,10 @@ async def fill_orbit_with_garbage(canvas, garbage, start_column, border_x, obsta
 
 def draw(canvas):
     canvas.nodelay(True)
-
     curses.curs_set(0)
+
+    global year
+    year = START_YEAR
 
     rocket_animation = []
     rocket_frame_dir = 'frames/rocket'
@@ -83,17 +80,15 @@ def draw(canvas):
             garbage.append(garbage_unit.read())
 
 
-    center_y, center_x = border_y//2, border_x//2
+    coordinates = border_y//2, border_x//2
 
-    global year
-    year = 1951
     stars_signs = ['+', '*', '.', ':']
     start_row = start_column = 1
-    #coroutines.append(update_current_year(start_time))
+
     stat_canvas = canvas.derwin(1, 1)
     coroutines.append(show_current_year(stat_canvas))
     coroutines.append(show_phrases(stat_canvas))
-    ship = animate_spaceship(canvas, center_y, center_x, rocket_animation, coroutines, obstacles, obstacles_in_last_collisions, is_gun_available)
+    ship = animate_spaceship(canvas, coordinates, rocket_animation, coroutines, obstacles, obstacles_in_last_collisions, is_gun_available)
     coroutines.append(ship)
     min_number_of_stars = 10
     max_number_of_stars = 145
@@ -104,8 +99,9 @@ def draw(canvas):
 
     coroutines.append(fill_orbit_with_garbage(canvas, garbage, start_column, border_x, obstacles, obstacles_in_last_collisions))
 
-    
     cycle_count = 0
+    
+    
     while True:
         cycle_count +=1
         if cycle_count % 20 == 0:
@@ -114,8 +110,13 @@ def draw(canvas):
         for coroutine in coroutines.copy():
             try:
                 coroutine.send(None)
+            except GameOverException:
+                coroutines.remove(coroutine)
+                coroutines.append(show_game_over(canvas, coordinates))
+
             except StopIteration:
                 coroutines.remove(coroutine)
+            
         if not len(coroutines):
             break
 
